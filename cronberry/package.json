@@ -1,0 +1,23 @@
+{
+  "name": "cronberry",
+  "version": "9.0.4",
+  "license": "AlcodesMobilityPvtltd",
+  "keywords": [
+    "Firebase",
+    "Web Push",
+    "Cronberry",
+    "Notifications",
+    "Webpush",
+    "Web Notification"
+  ],
+  "contributors": [
+    "Sourav Gupta<s.gupta@maaruji.com>"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0",
+    "firebase": "^6.2.3",
+    "@angular/fire": "^5.2.1"
+
+  }
+}
