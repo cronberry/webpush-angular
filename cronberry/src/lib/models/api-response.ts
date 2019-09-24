@@ -1,7 +1,7 @@
 export interface APIRequest {
     paramList: Param[];
   apiKey: string;
-  audienceId: string;
+  audienceId: number;
 }
 
 export interface Param {

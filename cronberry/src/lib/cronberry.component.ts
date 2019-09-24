@@ -6,6 +6,7 @@ import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs'
 import { CronberryService } from './cronberry.service';
 import { Param, APIRequest } from './models/api-response';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
 
 
 @Injectable()
@@ -15,7 +16,7 @@ export class CronberryComponent {
 
   token: any;
   apikeys: string;
-  audienceIds: String;
+  audienceIds: number;
 
   constructor(
     private apiService: CronberryService,
@@ -53,12 +54,12 @@ export class CronberryComponent {
   //   );
   // }
 
-  requestPermission(apiKey, audienceid) {
+  requestPermission(apiKey) {
     let apiKeys = apiKey;
-    let audienceids = audienceid;
+    this.audienceIds = new Date().getTime();
     this.angularFireMessaging.requestToken.subscribe(
       (token) => {
-        this.insertUserWebToken(token, apiKeys, audienceids);
+        this.insertUserWebToken(token, apiKeys, this.audienceIds);
       },
       (err) => {
         console.error('Unable to get permission to notify.', err);
@@ -66,17 +67,7 @@ export class CronberryComponent {
     );
   }
 
-  // insertUserWebToken(token: any, apiKey: string, audienceid: string) {
-  //   this.body(token, apiKey, audienceid);
-  //   this.apiService.insertUserWebToken(this.body(token, apiKey, audienceid)).subscribe(data => {
-  //     if (data.status) {
-  //       return;
-  //     }
-  //     err => { console.error(err) }
-  //   })
-  // }
-
-  insertUserWebToken(token: any, apiKey: string, audienceid: string) {
+  insertUserWebToken(token: any, apiKey: string, audienceid: number) {
     this.apiService.insertUserWebToken(this.body(token, apiKey, audienceid)).subscribe(data => {
       if (data.status) {
         return;
@@ -95,7 +86,7 @@ export class CronberryComponent {
     return element.paramObj;
   }
 
-  body(token: any, apiKey: string, audienceid: string): APIRequest {
+  body(token: any, apiKey: string, audienceid: number): APIRequest {
     let paramList: Param[] = [];
     paramList.push(this.ParamList("web_fcm_token", token));
     var element = {
@@ -106,7 +97,6 @@ export class CronberryComponent {
       }
     }
     return element.paramObj;
-
   }
 
   receiveMessage() {

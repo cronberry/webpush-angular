@@ -1,6 +1,6 @@
 {
   "name": "cronberry",
-  "version": "9.0.4",
+  "version": "9.0.5",
   "license": "AlcodesMobilityPvtltd",
   "keywords": [
     "Firebase",
@@ -19,5 +19,6 @@
     "firebase": "^6.2.3",
     "@angular/fire": "^5.2.1"
 
-  }
+  },
+  "repository":"https://github.com/cronberry/scripts"
 }
