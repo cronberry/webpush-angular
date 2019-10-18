@@ -2,18 +2,15 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireMessaging } from '@angular/fire/messaging';
-import { take } from 'rxjs/operators';
 import { BehaviorSubject } from 'rxjs'
 import { CronberryService } from './cronberry.service';
 import { Param, APIRequest } from './models/api-response';
-import { Timestamp } from 'rxjs/internal/operators/timestamp';
-
+import * as firebase from 'firebase';
 
 @Injectable()
 export class CronberryComponent {
-
   currentMessage = new BehaviorSubject(null);
-
+  messaging = firebase.messaging()
   token: any;
   apikeys: string;
   audienceIds: number;
@@ -31,40 +28,49 @@ export class CronberryComponent {
     )
   }
 
-  // updateToken(userId, token) {
-  //   this.angularFireAuth.authState.pipe(take(1)).subscribe(
-  //     () => {
-  //       const data = {};
-  //       data[userId] = token
-  //       this.angularFireDB.object('fcmTokens/').update(data)
-  //     })
-  // }
+  getPermission(apiKey) {
+    this.messaging.requestPermission().then(() => {
+      console.log('Notification permission granted.');
+      if(this.isTokenSentToServer()){
+        console.log('Token already sent ');
+      } else{
+        this.getRegisteredToken(apiKey);
+      }
+      return this.messaging.getToken()
+    })
+  }
 
-  // requestPermission(userId,apiKey,audienceid) {
-  //   let apiKeys = apiKey;
-  //   let audienceids = audienceid;
-  //   this.angularFireMessaging.requestToken.subscribe(
-  //     (token) => {
-  //       this.insertUserWebToken(token, apiKeys, audienceids);
-  //        this.updateToken(userId, token);
-  //     },
-  //     (err) => {
-  //       console.error('Unable to get permission to notify.', err);
-  //     }
-  //   );
-  // }
-
-  requestPermission(apiKey) {
+  getRegisteredToken(apiKey){
     let apiKeys = apiKey;
     this.audienceIds = new Date().getTime();
     this.angularFireMessaging.requestToken.subscribe(
       (token) => {
         this.insertUserWebToken(token, apiKeys, this.audienceIds);
+        this.sendTokenToServer(token);
       },
       (err) => {
         console.error('Unable to get permission to notify.', err);
+        this.setTokenSentToServer(false);
       }
     );
+  }
+
+  sendTokenToServer(currentToken) {
+    if (!this.isTokenSentToServer()) {
+      console.log('Sending token to server...');
+      this.setTokenSentToServer(true);
+    } else {
+      console.log('Token already sent to server so won\'t send it again ' +
+          'unless it changes');
+    }
+  }
+
+  setTokenSentToServer(sent) {
+    window.localStorage.setItem('sentToServer', sent ? '1' : '0');
+  }
+
+  isTokenSentToServer() {
+    return window.localStorage.getItem('sentToServer') === '1';
   }
 
   insertUserWebToken(token: any, apiKey: string, audienceid: number) {
