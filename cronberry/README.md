@@ -17,6 +17,9 @@ Sourav Gupta
 # Email
 s.gupta@maaruji.com
 
+# Support
+Enquiry mail at sales@cronberry.com
+
 # License
 Alcodes Mobility Pvt Ltd \
 [![Alcodes Mobility Pvt Ltd License](https://static.dev.cronberry.com/cronberry_images/cronberry-logo.png)](/LICENSE)
