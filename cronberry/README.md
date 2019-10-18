@@ -11,6 +11,12 @@ After user consent, the plugin fetches the user firebase token and passes it to 
 ### Development (Client-side only rendering)
 * run `npm run start` which will start `ng serve`
 
+# Author
+Sourav Gupta
+
+# Email
+s.gupta@maaruji.com
+
 # License
 Alcodes Mobility Pvt Ltd \
 [![Alcodes Mobility Pvt Ltd License](https://static.dev.cronberry.com/cronberry_images/cronberry-logo.png)](/LICENSE)
